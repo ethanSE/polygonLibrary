@@ -7,3 +7,5 @@ type Vertex = {
   x: number,
   y: number
 }
+
+type Edge = [Vertex, Vertex]
