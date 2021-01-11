@@ -36,5 +36,24 @@ unit['getSlope - another test'] = (done: () => void) => {
     assert.strictEqual(lib.getSlope([{ x: 0, y: 0 }, { x: 4, y: 3 }]), 3 / 4);
     done()
 }
+//-----getLineFromEdge-----
+unit['getLineFromEdge'] = (done: () => void) => {
+    assert.deepStrictEqual(lib.getLineFromEdge([{ x: 0, y: 0 }, { x: 4, y: 3 }]), { point: { x: 4, y: 3 }, slope: 3 / 4 });
+    done()
+}
+//-----getIntersection-----
+unit['getIntersection'] = (done: () => void) => {
+    let line1 = lib.getLineFromEdge([{ x: 0, y: 0 }, { x: 2, y: 2 }]);
+    let line2 = lib.getLineFromEdge([{ x: 0, y: 2 }, { x: 2, y: 0 }]);
+    assert.deepStrictEqual(lib.getIntersection(line1, line2), { x: 1, y: 1 });
+    done()
+}
+unit['getIntersection - another one'] = (done: () => void) => {
+    let line1 = lib.getLineFromEdge([{ x: 186, y: 131 }, { x: 342, y: 123 }]);
+    let line2 = lib.getLineFromEdge([{ x: 159, y: 72 }, { x: 303, y: 248 }]);
+    assert.deepStrictEqual(lib.getIntersection(line1, line2), { x: 206.41610738255034, y: 129.95302013422818 });
+    done()
+}
+
 
 module.exports = unit;

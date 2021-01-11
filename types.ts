@@ -9,3 +9,8 @@ type Vertex = {
 }
 
 type Edge = [Vertex, Vertex]
+
+type Line = {
+  point: Vertex,
+  slope: number
+}
