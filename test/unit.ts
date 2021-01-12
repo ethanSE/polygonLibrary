@@ -72,20 +72,46 @@ unit['isPointInRectBounds - no'] = function (done: () => void) {
 unit['doEdgesIntersect - yes'] = function (done: () => void) {
     let edge1: Edge = [{ x: 0, y: 0 }, { x: 1, y: 1 }]
     let edge2: Edge = [{ x: 0, y: 1 }, { x: 1, y: 0 }]
-    assert.ok(lib.doEdgesIntersect(edge1,edge2))
-    done()    
+    assert.ok(lib.doEdgesIntersect(edge1, edge2))
+    done()
 }
 unit['doEdgesIntersect - paralell'] = function (done: () => void) {
     let edge1: Edge = [{ x: 0, y: 0 }, { x: 5, y: 0 }]
     let edge2: Edge = [{ x: 0, y: 1 }, { x: 5, y: 1 }]
-    assert.strictEqual(lib.doEdgesIntersect(edge1,edge2), false)
+    assert.strictEqual(lib.doEdgesIntersect(edge1, edge2), false)
     done()
 }
 unit['doEdgesIntersect - lines intersect but not in bounds'] = function (done: () => void) {
     let edge1: Edge = [{ x: 0, y: 0 }, { x: 1, y: .5 }]
     let edge2: Edge = [{ x: 0, y: 2 }, { x: 1, y: 1.5 }]
-    assert.strictEqual(lib.doEdgesIntersect(edge1,edge2), false)
+    assert.strictEqual(lib.doEdgesIntersect(edge1, edge2), false)
     done()
+}
+//----getEdges-----
+unit['getEdges'] = function (done: () => void) {
+    let vertices: Vertex[] = [{ x: 0, y: 0 }, { x: 0, y: 1 }, { x: 1, y: 1 }, { x: 1, y: 0 }, { x: 0, y: 0 }];
+    let edges: Edge[] = lib.getEdges(vertices);
+    let expectedEdges: Edge[] = [
+        [{ x: 0, y: 0 }, { x: 0, y: 1 }],
+        [{ x: 0, y: 1 }, { x: 1, y: 1 }],
+        [{ x: 1, y: 1 }, { x: 1, y: 0 }],
+        [{ x: 1, y: 0 }, { x: 0, y: 0 }]
+    ]
+    assert.deepStrictEqual(edges, expectedEdges)
+    done()
+}
+//-----isSelfIntersecting-----
+unit['isSelfIntersecting - yes'] = function (done: () => void) {
+    let vertices: Vertex[] = [{ x: 0, y: 0 }, { x: 1, y: 1 }, { x: 0.5, y: 2 }, { x: 0, y: 1 }, { x: 1, y: 0 }, { x: 0, y: 0 }];
+    let edges: Edge[] = lib.getEdges(vertices);
+    assert.strictEqual(lib.isSelfIntersecting(edges), true)
+    done();
+}
+unit['isSelfIntersecting - no'] = function (done: () => void) {
+    let vertices: Vertex[] = [{ x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0.5, y: 2 }, { x: 1, y: 1 }, { x: 1, y: 0 }, { x: 0, y: 0 }];
+    let edges: Edge[] = lib.getEdges(vertices);
+    assert.strictEqual(lib.isSelfIntersecting(edges), false)
+    done();
 }
 
 module.exports = unit;
