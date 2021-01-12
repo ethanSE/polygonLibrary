@@ -54,6 +54,38 @@ unit['getIntersection - another one'] = (done: () => void) => {
     assert.deepStrictEqual(lib.getIntersection(line1, line2), { x: 206.41610738255034, y: 129.95302013422818 });
     done()
 }
+//-----isPointInRectBounds-----
+unit['isPointInRectBounds'] = function (done: () => void) {
+    let point = { x: 186, y: 131 };
+    let edge: Edge = [{ x: 159, y: 72 }, { x: 303, y: 248 }]
+    assert.ok(lib.isPointInRectBounds(edge, point));
+    done();
+};
+unit['isPointInRectBounds - no'] = function (done: () => void) {
+    let point = { x: 304, y: 131 };
+    let edge: Edge = [{ x: 159, y: 72 }, { x: 303, y: 248 }]
 
+    assert.strictEqual(lib.isPointInRectBounds(edge, point), false);
+    done();
+};
+//-----doEdgesIntersect-----
+unit['doEdgesIntersect - yes'] = function (done: () => void) {
+    let edge1: Edge = [{ x: 0, y: 0 }, { x: 1, y: 1 }]
+    let edge2: Edge = [{ x: 0, y: 1 }, { x: 1, y: 0 }]
+    assert.ok(lib.doEdgesIntersect(edge1,edge2))
+    done()    
+}
+unit['doEdgesIntersect - paralell'] = function (done: () => void) {
+    let edge1: Edge = [{ x: 0, y: 0 }, { x: 5, y: 0 }]
+    let edge2: Edge = [{ x: 0, y: 1 }, { x: 5, y: 1 }]
+    assert.strictEqual(lib.doEdgesIntersect(edge1,edge2), false)
+    done()
+}
+unit['doEdgesIntersect - lines intersect but not in bounds'] = function (done: () => void) {
+    let edge1: Edge = [{ x: 0, y: 0 }, { x: 1, y: .5 }]
+    let edge2: Edge = [{ x: 0, y: 2 }, { x: 1, y: 1.5 }]
+    assert.strictEqual(lib.doEdgesIntersect(edge1,edge2), false)
+    done()
+}
 
 module.exports = unit;

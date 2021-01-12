@@ -22,13 +22,41 @@ let polygon = {
 
         return { point: point, slope: slope };
     },
-    getIntersection: function (line1: Line, line2: Line) {
+    getIntersection: function (line1: Line, line2: Line): Vertex {
         //lines are in point-slope form
         //solve for x
         let xIntersection: number = ((line2.slope * line2.point.x + line1.point.y) - (line1.slope * line1.point.x + line2.point.y)) / (line2.slope - line1.slope)
         //plug in to formula
         let yIntersection: number = line1.slope * (xIntersection - line1.point.x) + line1.point.y;
         return { x: xIntersection, y: yIntersection };
+    },
+    isPointInRectBounds: function (edge: Edge, point: Vertex): boolean {
+        let xMin = Math.min(edge[0].x, edge[1].x);
+        let xMax = Math.max(edge[0].x, edge[1].x);
+        let isInXRange = xMin <= point.x && point.x <= xMax;
+
+        let yMin = Math.min(edge[0].y, edge[1].y);
+        let yMax = Math.max(edge[0].y, edge[1].y);
+        let isInYRange = yMin <= point.y && point.y <= yMax;
+
+        return isInXRange && isInYRange;
+    },
+    doEdgesIntersect: function (edge1: Edge, edge2: Edge): boolean {
+        let line1: Line = this.getLineFromEdge(edge1);
+        let line2: Line = this.getLineFromEdge(edge2);
+        //if paralell return false
+        if (line1.slope == line2.slope) {
+            return false
+        }
+
+        //get intersection point
+        let intersection = this.getIntersection(line1, line2);
+
+        //if intersection is in x bounds and in y bounds return true
+        let inEdge1Bounds = this.isPointInRectBounds(edge1, intersection)
+        let inEdge2Bounds = this.isPointInRectBounds(edge2, intersection);
+
+        return inEdge1Bounds && inEdge2Bounds;
     }
 };
 
