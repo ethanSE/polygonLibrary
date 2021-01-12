@@ -57,6 +57,32 @@ let polygon = {
         let inEdge2Bounds = this.isPointInRectBounds(edge2, intersection);
 
         return inEdge1Bounds && inEdge2Bounds;
+    },
+    getEdges: function (vertices: Vertex[]): Edge[] {
+        let edges: Edge[] = [];
+        for (let i = 0; i < vertices.length - 1; i++) {
+            edges.push([vertices[i], vertices[(i + 1) % vertices.length]])
+        }
+        return edges;
+    },
+    isSelfIntersecting: function (shape: Edge[]): boolean {
+        //generate all pairs of edges that should be checked 
+        let comparisonsToMake: [Edge, Edge][] = [];
+        //only need to loop halfway, comparison order is not important:
+        //doEdgesIntersect(edge1,edge2) = doEdgesIntersect(edge2, edge1)
+        for (let i = 0; i <= shape.length; i++) {
+            //don't compare to current or next, hence +2
+            for (let j = i + 2; j <= shape.length - 1; j++) {
+                //don't check if first intersects last
+                if (!(i == 0 && j == shape.length)) {
+                    comparisonsToMake.push([shape[i], shape[j]])
+                }
+            }
+        }
+
+        //is there a pair of edges that intersects
+        let selfIntersects = comparisonsToMake.some((edgePair) => this.doEdgesIntersect(edgePair[0], edgePair[1]));
+        return selfIntersects;
     }
 };
 
